@@ -1,4 +1,4 @@
-import IColumn from "../interface/IColumn";
+import IColumn from "interface/IColumn";
 
 export default interface IBoard {
   id: string;
