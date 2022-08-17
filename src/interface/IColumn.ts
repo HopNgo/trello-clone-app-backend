@@ -1,4 +1,4 @@
-import ICard from "../interface/ICard";
+import ICard from "interface/ICard";
 
 export default interface IColumn {
   id: string;
