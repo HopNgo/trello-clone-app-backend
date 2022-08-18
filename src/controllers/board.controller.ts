@@ -1,4 +1,4 @@
-import { httpStatusCode } from "./../utilities/constants";
+import { httpStatusCode } from "../utilities/constants";
 import { Request, Response } from "express";
 import { boardService } from "../services/board.service";
 

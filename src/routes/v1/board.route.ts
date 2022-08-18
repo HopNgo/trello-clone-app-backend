@@ -1,6 +1,6 @@
 import { boardValidation } from "./../../validations/board.validation";
 import express, { Router } from "express";
-import { boardController } from "../../controllers/boards.controller";
+import { boardController } from "../../controllers/board.controller";
 
 const router: Router = express.Router();
 
