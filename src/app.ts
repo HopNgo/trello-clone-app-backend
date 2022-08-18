@@ -1,13 +1,16 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import connectDB from "./config/mongodb";
-const app: Application = express();
+import { apiV1 } from "./routes/v1";
 const PORT: Number = 5000;
 
 const bootServer = () => {
-  app.get("/", (req: Request, res: Response) => {
-    res.send("hello");
-  });
+  const app: Application = express();
+  app.use(express.json());
 
+  //Use APIs
+  app.use("/v1", apiV1);
+
+  //app listen
   app.listen(PORT, () => {
     console.log("Sever is running on PORT = " + PORT);
   });

@@ -20,8 +20,8 @@ const createNew = async (data: any) => {
     const value: Promise<any> = await validateSchema(data);
     await getDB().collection(boardCollectionName).insertOne(value);
     return value;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
