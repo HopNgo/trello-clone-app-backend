@@ -6,7 +6,7 @@ const cardCollectionName = "cards";
 const cardCollectionSchema = Joi.object({
   boardId: Joi.string().required(),
   columnId: Joi.string().required(),
-  title: Joi.string().required(),
+  title: Joi.string().required().trim(),
   cover: Joi.string().default(null),
   createdAt: Joi.date().timestamp().default(Date.now()),
   updatedAt: Joi.date().timestamp().default(null),
@@ -22,8 +22,8 @@ const createNew = async (data: any) => {
     const value: Promise<any> = await validateSchema(data);
     await getDB().collection(cardCollectionName).insertOne(value);
     return value;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
