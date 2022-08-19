@@ -18,6 +18,29 @@ const validateSchema = async (data: any) => {
   });
 };
 
+const pushCardOrder = async (columnId: string, newCardId: string) => {
+  try {
+    const result = await getDB()
+      .collection(columnCollectionName)
+      .findOneAndUpdate(
+        { _id: new ObjectId(columnId) },
+        {
+          $push: {
+            cardOrder: newCardId,
+          },
+        },
+        {
+          returnNewDocument: true,
+        }
+      );
+    const { value } = result;
+    console.log(value);
+    return value;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
 const createNew = async (data: any) => {
   try {
     const value: Promise<any> = await validateSchema(data);
@@ -65,4 +88,9 @@ const deleteColumn = async (id: string, data: any) => {
   }
 };
 
-export const ColumnModel = { createNew, updateColumn, deleteColumn };
+export const ColumnModel = {
+  createNew,
+  updateColumn,
+  deleteColumn,
+  pushCardOrder,
+};
