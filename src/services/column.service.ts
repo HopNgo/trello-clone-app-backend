@@ -1,8 +1,13 @@
+import { BoardModel } from "../models/board.model";
 import { ColumnModel } from "../models/column.model";
 const createNew = async (data: any) => {
   try {
-    const result: any = await ColumnModel.createNew(data);
-    return result;
+    const newColumn: any = await ColumnModel.createNew(data);
+    await BoardModel.pushColumnOrder(
+      newColumn.boardId.toString(),
+      newColumn._id.toString()
+    );
+    return newColumn;
   } catch (error) {
     console.log(error);
   }
