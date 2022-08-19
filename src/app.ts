@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, { Application } from "express";
 import connectDB from "./config/mongodb";
 import { apiV1 } from "./routes/v1";
@@ -5,7 +6,12 @@ const PORT: Number = 5000;
 
 const bootServer = () => {
   const app: Application = express();
+  const corsOptions = {
+    origin: "http://localhost:3000",
+    optionsSuccessStatus: 200,
+  };
   app.use(express.json());
+  app.use(cors(corsOptions));
 
   //Use APIs
   app.use("/v1", apiV1);
