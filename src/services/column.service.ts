@@ -1,4 +1,5 @@
 import { BoardModel } from "../models/board.model";
+import { CardModel } from "../models/card.model";
 import { ColumnModel } from "../models/column.model";
 const createNew = async (data: any) => {
   try {
@@ -30,10 +31,16 @@ const deleteColumn = async (id: string) => {
   try {
     const deleteData = { _destroy: true, updatedAt: Date.now() };
     const result: any = await ColumnModel.deleteColumn(id, deleteData);
+    await BoardModel.deleteItemColumnOrder(result.boardId, id);
+    await CardModel.updateDestroyCard(id);
     return result;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const columnService = { createNew, deleteColumn, updateColumn };
+export const columnService = {
+  createNew,
+  deleteColumn,
+  updateColumn,
+};

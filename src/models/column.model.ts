@@ -59,7 +59,6 @@ const updateColumn = async (id: string, data: any) => {
         { _id: new ObjectId(id) },
         { $set: data },
         {
-          upsert: true,
           returnDocument: "after",
         }
       );
@@ -78,7 +77,7 @@ const deleteColumn = async (id: string, data: any) => {
       .findOneAndUpdate(
         { _id: new ObjectId(id) },
         { $set: data },
-        { upsert: true, returnDocument: "after" }
+        { returnDocument: "after" }
       );
     const { value } = result;
     console.log(value);
@@ -88,9 +87,10 @@ const deleteColumn = async (id: string, data: any) => {
   }
 };
 
+
 export const ColumnModel = {
   createNew,
   updateColumn,
   deleteColumn,
-  pushCardOrder,
+  pushCardOrder
 };

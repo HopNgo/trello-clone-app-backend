@@ -1,3 +1,5 @@
+import Joi from "joi";
+
 interface iHttpStatusCode {
   OK: number;
   BAD_REQUEST: number;
@@ -13,3 +15,9 @@ export const httpStatusCode: iHttpStatusCode = {
   NOT_FOUND: 404,
   INTERNAL_SERVER: 500,
 };
+
+export const customJoi: Joi.Root = Joi.defaults((schema) =>
+  schema.options({
+    allowUnknown: true,
+  })
+);

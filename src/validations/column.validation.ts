@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import { httpStatusCode } from "../utilities/constants";
+import { customJoi, httpStatusCode } from "../utilities/constants";
 
 const createNew = async (req: Request, res: Response, next: NextFunction) => {
   const condition: any = Joi.object({
@@ -23,12 +23,6 @@ const updateColumn = async (
   res: Response,
   next: NextFunction
 ) => {
-  const customJoi = Joi.defaults((schema) =>
-    schema.options({
-      allowUnknown: true,
-    })
-  );
-
   const condition: any = customJoi.object({
     title: Joi.string().trim(),
   });
@@ -44,5 +38,7 @@ const updateColumn = async (
     });
   }
 };
+
+
 
 export const columnValidation = { createNew, updateColumn };

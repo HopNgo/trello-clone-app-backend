@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
 
 const cardCollectionName = "cards";
@@ -27,4 +28,40 @@ const createNew = async (data: any) => {
   }
 };
 
-export const CardModel = { createNew };
+const updateDestroyCard = async (columnId: string) => {
+  try {
+    await getDB()
+      .collection(cardCollectionName)
+      .updateMany(
+        { columnId: columnId },
+        {
+          $set: {
+            _destroy: true,
+          },
+        }
+      );
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+const updateCard = async (id: string, data: any) => {
+  try {
+    const result = await getDB()
+      .collection(cardCollectionName)
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: data },
+        {
+          returnDocument: "after",
+        }
+      );
+    const { value } = result;
+    console.log(value);
+    return value;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const CardModel = { createNew, updateDestroyCard, updateCard };

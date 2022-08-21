@@ -27,4 +27,18 @@ const getFullBoard = async (req: Request, res: Response) => {
   }
 };
 
-export const boardController = { createNew, getFullBoard };
+
+const updateColumnOrder = async (req: Request, res: Response) => {
+  try {
+    const columnIdToUpdate: string = req.params.id;
+    const result = await boardService.updateColumnOrder(columnIdToUpdate, req.body);
+    console.log(result);
+    res.status(httpStatusCode.OK).json(result);
+  } catch (error: any) {
+    res.status(httpStatusCode.INTERNAL_SERVER).json({
+      errors: new Error(error).message,
+    });
+  }
+};
+
+export const boardController = { createNew, getFullBoard , updateColumnOrder};
