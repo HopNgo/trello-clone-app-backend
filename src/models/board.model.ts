@@ -39,7 +39,7 @@ const pushColumnOrder = async (boardId: string, newColumnId: string) => {
           },
         },
         {
-          returnNewDocument: true,
+          returnDocument: "after",
         }
       );
     const { value } = result;
@@ -66,6 +66,13 @@ const getFullBoard = async (boardId: string) => {
             from: "columns",
             localField: "_id",
             foreignField: "boardId",
+            pipeline: [
+              {
+                $match: {
+                  _destroy: false,
+                },
+              },
+            ],
             as: "columns",
           },
         },
@@ -74,6 +81,13 @@ const getFullBoard = async (boardId: string) => {
             from: "cards",
             localField: "_id",
             foreignField: "boardId",
+            pipeline: [
+              {
+                $match: {
+                  _destroy: false,
+                },
+              },
+            ],
             as: "cards",
           },
         },
@@ -85,4 +99,47 @@ const getFullBoard = async (boardId: string) => {
   }
 };
 
-export const BoardModel = { createNew, getFullBoard, pushColumnOrder };
+const updateColumnOrder = async (id: string, data: any) => {
+  try {
+    const result = await getDB()
+      .collection(boardCollectionName)
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: data },
+        {
+          returnDocument: "after",
+        }
+      );
+    const { value } = result;
+    console.log(value);
+    return value;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+const deleteItemColumnOrder = async (boardId: string, columnId: string) => {
+  try {
+    await getDB()
+      .collection(boardCollectionName)
+      .update(
+        { _id: new ObjectId(boardId) },
+        {
+          $pull: {
+            columnOrder: columnId,
+          },
+        },
+        { multi: true }
+      );
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const BoardModel = {
+  createNew,
+  getFullBoard,
+  pushColumnOrder,
+  updateColumnOrder,
+  deleteItemColumnOrder,
+};

@@ -26,6 +26,7 @@ const updateColumn = async (req: Request, res: Response) => {
     });
   }
 };
+
 const deleteColumn = async (req: Request, res: Response) => {
   try {
     const columnIdToDelete: string = req.params.id;
@@ -39,4 +40,9 @@ const deleteColumn = async (req: Request, res: Response) => {
   }
 };
 
-export const columnController = { createNew, updateColumn, deleteColumn };
+
+export const columnController = {
+  createNew,
+  updateColumn,
+  deleteColumn,
+};

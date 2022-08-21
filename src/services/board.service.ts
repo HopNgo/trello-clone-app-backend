@@ -12,11 +12,6 @@ const getFullBoard = async (boardId: string) => {
   try {
     const board: any = await BoardModel.getFullBoard(boardId);
 
-    //remove columns from board if they have _destroy field equal true;
-
-    board.columns = board.columns.filter((column: any) => !column._destroy);
-    board.columnOrder = board.columns.map((column: any) => column._id);
-
     //add cards array into column field to board
     board.columns.forEach((column: any) => {
       column;
@@ -33,4 +28,14 @@ const getFullBoard = async (boardId: string) => {
   }
 };
 
-export const boardService = { createNew, getFullBoard };
+const updateColumnOrder = async (id: string, data: any) => {
+  try {
+    const updateData = { ...data, updatedAt: Date.now() };
+    const result: any = await BoardModel.updateColumnOrder(id, updateData);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const boardService = { createNew, getFullBoard, updateColumnOrder };

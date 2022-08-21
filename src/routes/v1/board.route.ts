@@ -8,4 +8,7 @@ router.get("/:id", boardController.getFullBoard);
 
 router.post("/addBoard", boardValidation.createNew, boardController.createNew);
 
+router.put("/updateBoard/:id", boardValidation.updateColumnOrder, boardController.updateColumnOrder);
+
+
 export const boardRoutes = router;

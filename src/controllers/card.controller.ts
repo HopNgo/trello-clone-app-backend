@@ -14,4 +14,19 @@ const createNew = async (req: Request, res: Response) => {
   }
 };
 
-export const cardController = { createNew };
+const updateCard = async (req: Request, res: Response) => {
+  try {
+    const cardIdToUpdate: string = req.params.id;
+    const result = await cardService.updateCard(cardIdToUpdate, req.body);
+    console.log(result);
+    res.status(httpStatusCode.OK).json(result);
+  } catch (error: any) {
+    res.status(httpStatusCode.INTERNAL_SERVER).json({
+      errors: new Error(error).message,
+    });
+  }
+};
+export const cardController: {
+  createNew: (req: Request, res: Response) => Promise<void>;
+  updateCard: (req: Request, res: Response) => Promise<void>;
+} = { createNew, updateCard };
