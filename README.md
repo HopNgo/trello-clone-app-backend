@@ -11,7 +11,7 @@
 ```
 $ git clone https://github.com/HopNgo/trello-clone-app-backend.git
 $ cd folder
-$ npm install ...
+$ npm install ... (packages in dependencies)
 $ npm run dev
 
 ```
