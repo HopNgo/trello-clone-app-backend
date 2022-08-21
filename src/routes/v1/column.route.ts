@@ -14,9 +14,6 @@ router.put(
   columnValidation.updateColumn,
   columnController.updateColumn
 );
-router.put(
-  "/deleteColumn/:id",
-  columnController.deleteColumn
-);
+router.delete("/deleteColumn/:id", columnController.deleteColumn);
 
 export const columnRoutes = router;

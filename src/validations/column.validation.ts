@@ -23,14 +23,19 @@ const updateColumn = async (
   res: Response,
   next: NextFunction
 ) => {
-  const condition: any = Joi.object({
+  const customJoi = Joi.defaults((schema) =>
+    schema.options({
+      allowUnknown: true,
+    })
+  );
+
+  const condition: any = customJoi.object({
     title: Joi.string().trim(),
   });
 
   try {
     await condition.validateAsync(req.body, {
       abortEarly: false,
-      allowUnknow: true,
     });
     next();
   } catch (error: any) {
@@ -39,6 +44,5 @@ const updateColumn = async (
     });
   }
 };
-
 
 export const columnValidation = { createNew, updateColumn };

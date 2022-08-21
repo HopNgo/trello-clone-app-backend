@@ -30,7 +30,7 @@ const pushCardOrder = async (columnId: string, newCardId: string) => {
           },
         },
         {
-          returnNewDocument: true,
+          returnDocument: "after",
         }
       );
     const { value } = result;
@@ -59,7 +59,8 @@ const updateColumn = async (id: string, data: any) => {
         { _id: new ObjectId(id) },
         { $set: data },
         {
-          returnNewDocument: true,
+          upsert: true,
+          returnDocument: "after",
         }
       );
     const { value } = result;
@@ -71,14 +72,13 @@ const updateColumn = async (id: string, data: any) => {
 };
 const deleteColumn = async (id: string, data: any) => {
   try {
+    console.log(data);
     const result = await getDB()
       .collection(columnCollectionName)
       .findOneAndUpdate(
         { _id: new ObjectId(id) },
         { $set: data },
-        {
-          returnNewDocument: true,
-        }
+        { upsert: true, returnDocument: "after" }
       );
     const { value } = result;
     console.log(value);

@@ -55,7 +55,7 @@ const getFullBoard = async (boardId: string) => {
     const result = await getDB()
       .collection(boardCollectionName)
       .aggregate([
-        { $match: { _id: new ObjectId(boardId) } },
+        { $match: { _id: new ObjectId(boardId), _destroy: false } },
         {
           $addFields: {
             _id: { $toString: "$_id" },
@@ -79,7 +79,6 @@ const getFullBoard = async (boardId: string) => {
         },
       ])
       .toArray();
-    console.log(result);
     return result[0] || {};
   } catch (error: any) {
     throw new Error(error);

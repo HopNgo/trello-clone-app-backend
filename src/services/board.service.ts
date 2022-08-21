@@ -10,15 +10,24 @@ const createNew = async (data: any) => {
 
 const getFullBoard = async (boardId: string) => {
   try {
-    const boards: any = await BoardModel.getFullBoard(boardId);
-    boards.columns.forEach((column: any) => {
-      column.cards = boards.cards.filter(
-        (card: any) => card.columnId.toString() === column._id.toString()
+    const board: any = await BoardModel.getFullBoard(boardId);
+
+    //remove columns from board if they have _destroy field equal true;
+
+    board.columns = board.columns.filter((column: any) => !column._destroy);
+    board.columnOrder = board.columns.map((column: any) => column._id);
+
+    //add cards array into column field to board
+    board.columns.forEach((column: any) => {
+      column;
+      column.cards = board.cards.filter(
+        (card: any) =>
+          card.columnId.toString() === column._id.toString() && !card._destroy
       );
     });
-    delete boards.cards;
-    console.log(boards);
-    return boards;
+    delete board.cards;
+
+    return board;
   } catch (error) {
     console.log(error);
   }

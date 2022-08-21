@@ -1,10 +1,13 @@
-import { MongoClient } from "mongodb";
+import { ConnectOptions, MongoClient } from "mongodb";
 import env from "./enviroment";
 
 let dbInstance: any = null;
 
 const connectDB = async () => {
-  const client: MongoClient = new MongoClient(env.DATABASE_URL);
+  const client: MongoClient = new MongoClient(env.DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  } as ConnectOptions);
 
   await client.connect();
   dbInstance = client.db(env.DATABASE_NAME);
