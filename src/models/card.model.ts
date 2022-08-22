@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { ObjectId } from "mongodb";
+import { resourceLimits } from "worker_threads";
 import { getDB } from "../config/mongodb";
 
 const cardCollectionName = "cards";
@@ -15,7 +16,10 @@ const cardCollectionSchema = Joi.object({
 });
 
 const validateSchema = async (data: any) => {
-  return await cardCollectionSchema.validateAsync(data, { abortEarly: false });
+  return await cardCollectionSchema.validateAsync(data, {
+    abortEarly: false,
+    allowUnknown: true,
+  });
 };
 
 const createNew = async (data: any) => {
@@ -64,4 +68,54 @@ const updateCard = async (id: string, data: any) => {
   }
 };
 
-export const CardModel = { createNew, updateDestroyCard, updateCard };
+const updateDestroyCards = async (data: {
+  columnId: string;
+  _destroy: boolean;
+  updatedAt: number;
+}) => {
+  try {
+    const result = await getDB()
+      .collection(cardCollectionName)
+      .updateMany(
+        { columnId: data.columnId },
+        {
+          $set: {
+            _destroy: data._destroy,
+          },
+        },
+        { multi: true }
+      );
+    return result;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+const getCardsFromColumnId = async (columnId: string) => {
+  try {
+    const result = await getDB()
+      .collection(cardCollectionName)
+      .find({ columnId: columnId });
+    return result.toArray() || [];
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const CardModel: {
+  createNew: (data: any) => Promise<any>;
+  updateDestroyCard: (columnId: string) => Promise<void>;
+  updateCard: (id: string, data: any) => Promise<any>;
+  updateDestroyCards: (data: {
+    columnId: string;
+    _destroy: boolean;
+    updatedAt: number;
+  }) => Promise<any>;
+  getCardsFromColumnId: (columnId: string) => Promise<any>;
+} = {
+  createNew,
+  updateDestroyCard,
+  updateCard,
+  updateDestroyCards,
+  getCardsFromColumnId,
+};

@@ -26,7 +26,19 @@ const updateCard = async (req: Request, res: Response) => {
     });
   }
 };
+
+const updateDestroyCards = async (req: Request, res: Response) => {
+  try {
+    const result = await cardService.updateDestroyCards(req.body);
+    res.status(httpStatusCode.OK).json(result);
+  } catch (error: any) {
+    res.status(httpStatusCode.INTERNAL_SERVER).json({
+      errors: new Error(error).message,
+    });
+  }
+};
 export const cardController: {
   createNew: (req: Request, res: Response) => Promise<void>;
   updateCard: (req: Request, res: Response) => Promise<void>;
-} = { createNew, updateCard };
+  updateDestroyCards: (req: Request, res: Response) => Promise<void>;
+} = { createNew, updateCard, updateDestroyCards };

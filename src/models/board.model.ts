@@ -136,7 +136,13 @@ const deleteItemColumnOrder = async (boardId: string, columnId: string) => {
   }
 };
 
-export const BoardModel = {
+export const BoardModel: {
+  createNew: (data: any) => Promise<any>;
+  getFullBoard: (boardId: string) => Promise<any>;
+  pushColumnOrder: (boardId: string, newColumnId: string) => Promise<any>;
+  updateColumnOrder: (id: string, data: any) => Promise<any>;
+  deleteItemColumnOrder: (boardId: string, columnId: string) => Promise<any>;
+} = {
   createNew,
   getFullBoard,
   pushColumnOrder,

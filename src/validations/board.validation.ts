@@ -36,4 +36,11 @@ const updateColumnOrder = async (
   }
 };
 
-export const boardValidation = { createNew, updateColumnOrder };
+export const boardValidation: {
+  createNew: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+  updateColumnOrder: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+} = { createNew, updateColumnOrder };

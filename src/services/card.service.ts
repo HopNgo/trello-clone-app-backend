@@ -23,4 +23,52 @@ const updateCard = async (id: string, data: any) => {
     console.log(error);
   }
 };
-export const cardService = { createNew, updateCard };
+
+const updateDestroyCards = async (data: {
+  columnId: string;
+  _destroy: boolean;
+}) => {
+  try {
+    const updateData = { ...data, updatedAt: Date.now() };
+    //remove cards from columnId when _destroy: true
+    if (updateData._destroy) {
+      await CardModel.updateDestroyCards(updateData);
+      await ColumnModel.updateColumn(updateData.columnId, {
+        cardOrder: [],
+        updatedAt: Date.now(),
+      });
+    } else {
+      //archive cards from columnId when _destroy: false
+      //return updated column after archive
+      await CardModel.updateDestroyCards(updateData);
+      const resultFromCard = await CardModel.getCardsFromColumnId(
+        updateData.columnId
+      );
+      const cardOrderArray = resultFromCard.map((card: any) => card._id);
+      const dataUpdateColumn = {
+        cardOrder: cardOrderArray,
+        updatedAt: Date.now(),
+      };
+      const resultFromColumn = await ColumnModel.updateColumn(
+        updateData.columnId,
+        dataUpdateColumn
+      );
+      const dataToReturn = {
+        ...resultFromColumn,
+        cards: [...resultFromCard],
+      };
+      return dataToReturn;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const cardService: {
+  createNew: (data: any) => Promise<any>;
+  updateCard: (id: string, data: any) => Promise<any>;
+  updateDestroyCards: (data: {
+    columnId: string;
+    _destroy: boolean;
+  }) => Promise<any>;
+} = { createNew, updateCard, updateDestroyCards };
