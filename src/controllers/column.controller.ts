@@ -40,8 +40,11 @@ const deleteColumn = async (req: Request, res: Response) => {
   }
 };
 
-
-export const columnController = {
+export const columnController: {
+  createNew: (req: Request, res: Response) => Promise<void>;
+  updateColumn: (req: Request, res: Response) => Promise<void>;
+  deleteColumn: (req: Request, res: Response) => Promise<void>;
+} = {
   createNew,
   updateColumn,
   deleteColumn,

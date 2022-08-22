@@ -39,7 +39,11 @@ const deleteColumn = async (id: string) => {
   }
 };
 
-export const columnService = {
+export const columnService: {
+  createNew: (data: any) => Promise<any>;
+  deleteColumn: (id: string) => Promise<any>;
+  updateColumn: (id: string, data: any) => Promise<any>;
+} = {
   createNew,
   deleteColumn,
   updateColumn,

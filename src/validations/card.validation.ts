@@ -37,4 +37,38 @@ const updateCard = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const cardValidation = { createNew, updateCard };
+const updateDestroyCards = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const condition: any = Joi.object({
+    columnId: Joi.string().required(),
+    _destroy: Joi.boolean().required(),
+  }).options({ allowUnknown: true });
+
+  try {
+    await condition.validateAsync(req.body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error: any) {
+    res.status(httpStatusCode.BAD_REQUEST).json({
+      errors: new Error(error).message,
+    });
+  }
+};
+
+export const cardValidation: {
+  createNew: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+  updateCard: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  updateDestroyCards: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+} = { createNew, updateCard, updateDestroyCards };

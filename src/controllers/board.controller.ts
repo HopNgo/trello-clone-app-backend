@@ -18,7 +18,6 @@ const getFullBoard = async (req: Request, res: Response) => {
   try {
     const boardId: string = req.params.id.trim();
     const result = await boardService.getFullBoard(boardId);
-    console.log(result);
     res.status(httpStatusCode.OK).json(result);
   } catch (error: any) {
     res.status(httpStatusCode.INTERNAL_SERVER).json({
@@ -26,12 +25,14 @@ const getFullBoard = async (req: Request, res: Response) => {
     });
   }
 };
-
 
 const updateColumnOrder = async (req: Request, res: Response) => {
   try {
     const columnIdToUpdate: string = req.params.id;
-    const result = await boardService.updateColumnOrder(columnIdToUpdate, req.body);
+    const result = await boardService.updateColumnOrder(
+      columnIdToUpdate,
+      req.body
+    );
     console.log(result);
     res.status(httpStatusCode.OK).json(result);
   } catch (error: any) {
@@ -41,4 +42,8 @@ const updateColumnOrder = async (req: Request, res: Response) => {
   }
 };
 
-export const boardController = { createNew, getFullBoard , updateColumnOrder};
+export const boardController: {
+  createNew: (req: Request, res: Response) => Promise<void>;
+  getFullBoard: (req: Request, res: Response) => Promise<void>;
+  updateColumnOrder: (req: Request, res: Response) => Promise<void>;
+} = { createNew, getFullBoard, updateColumnOrder };

@@ -39,6 +39,11 @@ const updateColumn = async (
   }
 };
 
-
-
-export const columnValidation = { createNew, updateColumn };
+export const columnValidation: {
+  createNew: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+  updateColumn: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+} = { createNew, updateColumn };

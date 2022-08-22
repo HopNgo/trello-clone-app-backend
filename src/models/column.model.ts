@@ -87,10 +87,14 @@ const deleteColumn = async (id: string, data: any) => {
   }
 };
 
-
-export const ColumnModel = {
+export const ColumnModel: {
+  createNew: (data: any) => Promise<any>;
+  updateColumn: (id: string, data: any) => Promise<any>;
+  deleteColumn: (id: string, data: any) => Promise<any>;
+  pushCardOrder: (columnId: string, newCardId: string) => Promise<any>;
+} = {
   createNew,
   updateColumn,
   deleteColumn,
-  pushCardOrder
+  pushCardOrder,
 };
