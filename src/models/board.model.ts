@@ -122,7 +122,7 @@ const deleteItemColumnOrder = async (boardId: string, columnId: string) => {
   try {
     await getDB()
       .collection(boardCollectionName)
-      .update(
+      .updateOne(
         { _id: new ObjectId(boardId) },
         {
           $pull: {

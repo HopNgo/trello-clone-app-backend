@@ -18,6 +18,9 @@ const updateCard = async (id: string, data: any) => {
     const updateData = { ...data, updatedAt: Date.now() };
     if (updateData._id) delete updateData._id;
     const result: any = await CardModel.updateCard(id, updateData);
+    if (updateData._destroy) {
+      await ColumnModel.deleteItemCardOrder(result.columnId, id);
+    }
     return result;
   } catch (error) {
     console.log(error);

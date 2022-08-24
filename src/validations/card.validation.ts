@@ -23,6 +23,7 @@ const createNew = async (req: Request, res: Response, next: NextFunction) => {
 const updateCard = async (req: Request, res: Response, next: NextFunction) => {
   const condition: any = customJoi.object({
     columnId: Joi.string().required(),
+    title: Joi.string().required().trim(),
   });
 
   try {
