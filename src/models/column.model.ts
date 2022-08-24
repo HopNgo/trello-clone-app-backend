@@ -87,14 +87,34 @@ const deleteColumn = async (id: string, data: any) => {
   }
 };
 
+const deleteItemCardOrder = async (columnId: string, cardId: string) => {
+  try {
+    await getDB()
+      .collection(columnCollectionName)
+      .updateOne(
+        { _id: new ObjectId(columnId) },
+        {
+          $pull: {
+            cardOrder: cardId,
+          },
+        },
+        { multi: true }
+      );
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
 export const ColumnModel: {
   createNew: (data: any) => Promise<any>;
   updateColumn: (id: string, data: any) => Promise<any>;
   deleteColumn: (id: string, data: any) => Promise<any>;
   pushCardOrder: (columnId: string, newCardId: string) => Promise<any>;
+  deleteItemCardOrder: (columnId: string, newCardId: string) => Promise<any>;
 } = {
   createNew,
   updateColumn,
   deleteColumn,
   pushCardOrder,
+  deleteItemCardOrder,
 };
