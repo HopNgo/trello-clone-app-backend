@@ -7,13 +7,10 @@ const PORT = process.env.PORT || 8080;
 
 const bootServer = () => {
   const app: Application = express();
-  const corsOptions = {
-    origin: "https://trello-clone-ngo-hop.herokuapp.com/",
-    optionsSuccessStatus: 200,
-  };
+
   app.use("/static", express.static(__dirname + "/public"));
   app.use(express.json());
-  app.use(cors(corsOptions));
+  app.use(cors());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
 
