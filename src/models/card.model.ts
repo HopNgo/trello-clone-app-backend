@@ -9,7 +9,7 @@ const cardCollectionSchema = Joi.object({
   boardId: Joi.string().required(),
   columnId: Joi.string().required(),
   title: Joi.string().required().trim(),
-  cover: Joi.string().default(null),
+  cover: Joi.string().allow(null).default(null),
   createdAt: Joi.date().timestamp().default(Date.now()),
   updatedAt: Joi.date().timestamp().default(null),
   _destroy: Joi.boolean().default(false),

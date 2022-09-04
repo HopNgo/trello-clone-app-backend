@@ -2,7 +2,8 @@ import cors from "cors";
 import express, { Application } from "express";
 import connectDB from "./config/mongodb";
 import { apiV1 } from "./routes/v1";
-const PORT: Number = 5000;
+import bodyParser from "body-parser";
+const PORT = process.env.PORT || 8080;
 
 const bootServer = () => {
   const app: Application = express();
@@ -10,8 +11,11 @@ const bootServer = () => {
     origin: "http://localhost:3000",
     optionsSuccessStatus: 200,
   };
+  app.use("/static", express.static(__dirname + "/public"));
   app.use(express.json());
   app.use(cors(corsOptions));
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
 
   //Use APIs
   app.use("/v1", apiV1);
