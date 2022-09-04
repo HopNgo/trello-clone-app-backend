@@ -3,7 +3,7 @@ import path from "path";
 
 const storage: multer.StorageEngine = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, path.join(__dirname, "../public/uploads/"));
+    callback(null, "./dist/public/uploads");
   },
   filename: function (req, file, callback) {
     const imageUrl =
