@@ -4,8 +4,16 @@ import { cardService } from "../services/card.service";
 
 const createNew = async (req: Request, res: Response) => {
   try {
-    const result = await cardService.createNew(req.body);
-    console.log(result);
+    const data = {
+      boardId: req.body.boardId,
+      columnId: req.body.columnId,
+      title: req.body.title,
+      cover: req.file
+        ? `${process.env.HOST}/static/uploads/${req.file?.filename}`
+        : null,
+    };
+    const result = await cardService.createNew(data);
+    console.log(req.file);
     res.status(httpStatusCode.OK).json(result);
   } catch (error: any) {
     res.status(httpStatusCode.INTERNAL_SERVER).json({

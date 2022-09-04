@@ -1,20 +1,22 @@
-import { ObjectID } from "bson";
-import Joi from "joi";
+import Joi, { allow } from "joi";
 import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
+import { customJoi } from "../utilities/constants";
 
 const boardCollectionName = "boards";
 
-const boardCollectionSchema = Joi.object({
+const boardCollectionSchema = customJoi.object({
   title: Joi.string().required().trim(),
+  cover: Joi.string().required(),
   columnOrder: Joi.array().items(Joi.string()).default([]),
   createdAt: Joi.date().timestamp().default(Date.now()),
   updatedAt: Joi.date().timestamp().default(null),
   _destroy: Joi.boolean().default(false),
 });
-
 const validateSchema = async (data: any) => {
-  return await boardCollectionSchema.validateAsync(data, { abortEarly: false });
+  return await boardCollectionSchema.validateAsync(data, {
+    abortEarly: false,
+  });
 };
 
 const createNew = async (data: any) => {
@@ -99,7 +101,60 @@ const getFullBoard = async (boardId: string) => {
   }
 };
 
-const updateColumnOrder = async (id: string, data: any) => {
+const getBoardList = async () => {
+  try {
+    const result = await getDB()
+      .collection(boardCollectionName)
+      .aggregate([
+        {
+          $match: {
+            _destroy: false,
+          },
+        },
+        { $unset: ["columnOrder"] },
+      ])
+      .toArray();
+    console.log(result);
+    return result;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+const findBoardByTitle = async (title: string) => {
+  try {
+    await getDB()
+      .collection(boardCollectionName)
+      .createIndex({ title: "text" });
+
+    const result = await getDB()
+      .collection(boardCollectionName)
+      .aggregate([
+        {
+          $match: {
+            title: new RegExp(title, "i"),
+            _destroy: false,
+          },
+        },
+        {
+          $limit: 5,
+        },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+          },
+        },
+      ])
+      .toArray();
+    console.log(result);
+    return result;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+const updateBoard = async (id: string, data: any) => {
   try {
     const result = await getDB()
       .collection(boardCollectionName)
@@ -140,12 +195,16 @@ export const BoardModel: {
   createNew: (data: any) => Promise<any>;
   getFullBoard: (boardId: string) => Promise<any>;
   pushColumnOrder: (boardId: string, newColumnId: string) => Promise<any>;
-  updateColumnOrder: (id: string, data: any) => Promise<any>;
+  updateBoard: (id: string, data: any) => Promise<any>;
   deleteItemColumnOrder: (boardId: string, columnId: string) => Promise<any>;
+  getBoardList: () => Promise<any>;
+  findBoardByTitle: (title: string) => Promise<any>;
 } = {
   createNew,
   getFullBoard,
   pushColumnOrder,
-  updateColumnOrder,
+  updateBoard,
   deleteItemColumnOrder,
+  getBoardList,
+  findBoardByTitle,
 };

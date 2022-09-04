@@ -1,14 +1,16 @@
-import { boardValidation } from "./../../validations/board.validation";
 import express, { Router } from "express";
 import { boardController } from "../../controllers/board.controller";
 
 const router: Router = express.Router();
 
+router.get("/", boardController.getBoardList);
+
+router.get("/findBoard/:title", boardController.findBoardByTitle);
+
 router.get("/:id", boardController.getFullBoard);
 
-router.post("/addBoard", boardValidation.createNew, boardController.createNew);
+router.post("/addBoard", boardController.createNew);
 
-router.put("/updateBoard/:id", boardValidation.updateColumnOrder, boardController.updateColumnOrder);
-
+router.put("/updateBoard/:id", boardController.updateBoard);
 
 export const boardRoutes = router;

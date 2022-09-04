@@ -26,13 +26,33 @@ const getFullBoard = async (req: Request, res: Response) => {
   }
 };
 
-const updateColumnOrder = async (req: Request, res: Response) => {
+const getBoardList = async (req: Request, res: Response) => {
+  try {
+    const result = await boardService.getBoardList();
+    res.status(httpStatusCode.OK).json(result);
+  } catch (error: any) {
+    res.status(httpStatusCode.INTERNAL_SERVER).json({
+      errors: new Error(error).message,
+    });
+  }
+};
+
+const findBoardByTitle = async (req: Request, res: Response) => {
+  try {
+    const title: string = req.params.title.trim();
+    const result = await boardService.findBoardByTitle(title);
+    res.status(httpStatusCode.OK).json(result);
+  } catch (error: any) {
+    res.status(httpStatusCode.INTERNAL_SERVER).json({
+      errors: new Error(error).message,
+    });
+  }
+};
+
+const updateBoard = async (req: Request, res: Response) => {
   try {
     const columnIdToUpdate: string = req.params.id;
-    const result = await boardService.updateColumnOrder(
-      columnIdToUpdate,
-      req.body
-    );
+    const result = await boardService.updateBoard(columnIdToUpdate, req.body);
     console.log(result);
     res.status(httpStatusCode.OK).json(result);
   } catch (error: any) {
@@ -45,5 +65,7 @@ const updateColumnOrder = async (req: Request, res: Response) => {
 export const boardController: {
   createNew: (req: Request, res: Response) => Promise<void>;
   getFullBoard: (req: Request, res: Response) => Promise<void>;
-  updateColumnOrder: (req: Request, res: Response) => Promise<void>;
-} = { createNew, getFullBoard, updateColumnOrder };
+  updateBoard: (req: Request, res: Response) => Promise<void>;
+  getBoardList: (req: Request, res: Response) => Promise<void>;
+  findBoardByTitle: (req: Request, res: Response) => Promise<void>;
+} = { createNew, getFullBoard, updateBoard, getBoardList, findBoardByTitle };
