@@ -1,19 +1,35 @@
 import { httpStatusCode } from "../utilities/constants";
 import { Request, Response } from "express";
 import { cardService } from "../services/card.service";
-
+import cloudinary from "../config/cloudinary";
+import { UploadApiResponse } from "cloudinary";
 const createNew = async (req: Request, res: Response) => {
   try {
-    const data = {
+    const data: {
+      boardId: string;
+      columnId: string;
+      title: string;
+      cover?: string;
+    } = {
       boardId: req.body.boardId,
       columnId: req.body.columnId,
       title: req.body.title,
-      cover: req.file
-        ? `${process.env.HOST}/static/uploads/${req.file?.filename}`
-        : null,
     };
+
+    if (req.file) {
+      let uploadedFile: UploadApiResponse;
+      try {
+        uploadedFile = await cloudinary.uploader.upload(req.file.path, {
+          folder: "TrelloPhoto",
+          resource_type: "auto",
+        });
+        data.cover = uploadedFile.secure_url;
+      } catch (error) {
+        return res.status(400).json({ message: "Cloudinary Error" });
+      }
+    }
     const result = await cardService.createNew(data);
-    console.log(req.file);
+
     res.status(httpStatusCode.OK).json(result);
   } catch (error: any) {
     res.status(httpStatusCode.INTERNAL_SERVER).json({
@@ -46,7 +62,7 @@ const updateDestroyCards = async (req: Request, res: Response) => {
   }
 };
 export const cardController: {
-  createNew: (req: Request, res: Response) => Promise<void>;
+  createNew: (req: Request, res: Response) => any;
   updateCard: (req: Request, res: Response) => Promise<void>;
   updateDestroyCards: (req: Request, res: Response) => Promise<void>;
 } = { createNew, updateCard, updateDestroyCards };

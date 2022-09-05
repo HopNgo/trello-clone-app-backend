@@ -11,7 +11,7 @@ const bootServer = () => {
   app.use("/static", express.static(__dirname + "/public"));
   app.use(express.json());
   app.use(cors());
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
   //Use APIs
