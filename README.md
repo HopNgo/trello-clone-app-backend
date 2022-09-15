@@ -8,6 +8,10 @@
 
 ##### Frontend Demo : https://trello-clone-ngo-hop.netlify.app/
 
+## Frontend Git
+
+Link : https://github.com/HopNgo/trello-clone-app-frontend.git
+
 ## Clone project and run test
 
 ```
