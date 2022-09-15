@@ -34,5 +34,11 @@ $ "ts-node": "^10.9.1",
 $ "typescript": "^4.7.4"
 
 ```
+## Contact
+
+#### Gmail: ngoxuanhop254@gmail.com
+#### Phone : +84 357903961
+
+
 
 ### Thanks for watching!
