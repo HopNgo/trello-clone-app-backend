@@ -6,10 +6,12 @@
 * npm >= v6.14.7
 * yarn > v1.19.1
 
+##### Frontend Demo : https://trello-clone-ngo-hop.netlify.app/
+
 ## Clone project and run test
 
 ```
-$ git clone https://github.com/HopNgo/trello-clone-app-backend.git
+$ git clone //github link//
 $ cd folder
 $ npm install (packages in dependencies)
 $ npm run dev
